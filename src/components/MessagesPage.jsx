@@ -6,7 +6,7 @@ export default function MessagesPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
 
-  const correctPassword = "bilanih"; // ubah sesuai keinginan
+  const correctPassword = "nblakeren090127"; 
 
   const handleAuth = (e) => {
     e.preventDefault();
@@ -80,24 +80,28 @@ export default function MessagesPage() {
             const sticker = getRandomSticker();
             const stickerPosition =
               index % 2 === 0
-                ? "top-[-14px] left-[-14px] rotate-[-10deg]"
-                : "bottom-[-14px] right-[-14px] rotate-[10deg]";
+                ? "-top-6 -left-6"
+                : "-bottom-6 -right-6";
 
             return (
               <div
                 key={msg.id}
-                className="relative bg-[#FFEF89] p-4 rounded-[20px] border border-[#FAC4D2] shadow-sm"
+                className="relative bg-[#FFEF89] p-6 rounded-[20px] border border-[#FAC4D2] shadow-sm overflow-hidden"
               >
-                {/* STICKER */}
+                {/* STICKER SEBAGAI DEKORASI */}
                 <img
                   src={sticker}
                   alt="sticker"
-                  className={`absolute ${stickerPosition} w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 animate-float`}
+                  className={`absolute ${stickerPosition} w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 opacity-70 animate-float pointer-events-none`}
                 />
-                <p className="font-semibold text-gray-700">
+
+                {/* TEKS PESAN DI ATAS STICKER */}
+                <p className="font-semibold text-gray-700 relative z-10">
                   Dari: <span className="text-[#FF89C8]">{msg.name}</span>
                 </p>
-                <p className="text-gray-800 italic break-words">{msg.message}</p>
+                <p className="text-gray-800 italic break-words relative z-10">
+                  {msg.message}
+                </p>
               </div>
             );
           })}
