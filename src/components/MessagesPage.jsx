@@ -3,24 +3,57 @@ import { supabase } from "../supabaseClient";
 
 export default function MessagesPage() {
   const [messages, setMessages] = useState([]);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [password, setPassword] = useState("");
 
-  useEffect(() => {
-    getMessages();
-  }, []);
+  const correctPassword = "bilanih"; // ubah sesuai keinginan kamu
 
-  const getMessages = async () => {
+  const handleAuth = (e) => {
+    e.preventDefault();
+    if (password === correctPassword) {
+      setAuthenticated(true);
+      fetchMessages();
+    } else {
+      alert("Kata sandi salah!");
+    }
+  };
+
+  const fetchMessages = async () => {
     const { data, error } = await supabase
       .from("messages")
       .select("*")
       .order("created_at", { ascending: false });
-
-    if (error) console.error(error);
-    else setMessages(data);
+    if (!error) setMessages(data);
   };
 
+  if (!authenticated) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#FFF7FA]">
+        <div className="bg-white rounded-[30px] p-6 shadow-md text-center">
+          <h2 className="text-[#FF89C8] font-semibold mb-3">Masukkan Kode Rahasia</h2>
+          <form onSubmit={handleAuth} className="flex flex-col gap-3">
+            <input
+              type="password"
+              placeholder="Kode rahasia..."
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="border rounded-lg px-3 py-2 focus:outline-none text-center"
+            />
+            <button
+              type="submit"
+              className="bg-[#FF89C8] text-white rounded-lg py-2 hover:opacity-90"
+            >
+              Masuk
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  // tampilan pesan kalau sudah masuk
   return (
     <div className="min-h-screen bg-[#FFF7FA] flex flex-col items-center py-6">
-      {/* header + tampilan sama seperti sebelumnya */}
       <div className="bg-[#FAC4D2] w-full max-w-sm rounded-t-[40px] text-white text-center py-5">
         <p className="text-sm opacity-80">something</p>
         <h2 className="text-base font-semibold">To Nabilah</h2>
