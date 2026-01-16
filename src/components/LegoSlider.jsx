@@ -17,7 +17,7 @@ export default function LegoSlider() {
     <img
       src={images[index]}
       alt="Lego"
-      className="w-28 h-28 object-contain transition-all duration-700"
+      className="w-45 h-40 object-contain transition-all duration-700"
     />
   );
 }
