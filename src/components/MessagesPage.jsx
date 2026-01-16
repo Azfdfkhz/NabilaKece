@@ -5,25 +5,8 @@ export default function MessagesPage() {
   const [messages, setMessages] = useState([]);
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
-  const [messageStickers, setMessageStickers] = useState({}); // stiker per pesan
 
-  const correctPassword = "nblakeren090127";
-
-  const stickers = [
-    "/stickers/Cat.png",
-    "/stickers/Cute.png",
-    "/stickers/Flower.png",
-    "/stickers/Hbd.png",
-    "/stickers/Tulip.png",
-    "/stickers/Stroberi.png",
-  ];
-
-  const getRandomSticker = (usedStickers) => {
-    // ambil stiker yang belum dipakai dulu
-    const unused = stickers.filter((s) => !usedStickers.includes(s));
-    if (unused.length === 0) return stickers[Math.floor(Math.random() * stickers.length)];
-    return unused[Math.floor(Math.random() * unused.length)];
-  };
+  const correctPassword = "nblakeren090127"; 
 
   const handleAuth = (e) => {
     e.preventDefault();
@@ -40,20 +23,20 @@ export default function MessagesPage() {
       .from("messages")
       .select("*")
       .order("created_at", { ascending: false });
-    if (!error) {
-      setMessages(data);
-
-      // assign stiker untuk setiap pesan agar tidak ngulang
-      const stickersMap = {};
-      const usedStickers = [];
-      data.forEach((msg) => {
-        const sticker = getRandomSticker(usedStickers);
-        stickersMap[msg.id] = sticker;
-        usedStickers.push(sticker);
-      });
-      setMessageStickers(stickersMap);
-    }
+    if (!error) setMessages(data);
   };
+
+  const stickers = [
+    "/stickers/Cat.png",
+    "/stickers/Cute.png",
+    "/stickers/Flower.png",
+    "/stickers/Hbd.png",
+    "/stickers/Tulip.png",
+    "/stickers/Stroberi.png",
+  ];
+
+  const getRandomSticker = () =>
+    stickers[Math.floor(Math.random() * stickers.length)];
 
   if (!authenticated) {
     return (
@@ -91,38 +74,34 @@ export default function MessagesPage() {
       </div>
 
       {/* LIST PESAN */}
-      <div className="w-full max-w-md flex flex-col gap-6 mt-5 relative">
-        {messages.map((msg, index) => {
-          const sticker = messageStickers[msg.id]; // ambil stiker yang sudah ditentukan
-          const offsetX = Math.floor(Math.random() * 40) - 20;
-          const offsetY = Math.floor(Math.random() * 40) - 20;
-          const rotate = Math.random() * 20 - 10;
+      <div className="bg-white w-full max-w-md rounded-b-[40px] px-5 pb-8 shadow-md">
+        <div className="flex flex-col gap-6 mt-5">
+          {messages.map((msg, index) => {
+            const sticker = getRandomSticker();
+            const stickerPosition =
+              index % 2 === 0
+                ? "top-[-14px] left-[-14px] rotate-[-10deg]"
+                : "bottom-[-14px] right-[-14px] rotate-[10deg]";
 
-          return (
-            <div key={msg.id} className="relative overflow-visible">
-              <img
-                src={sticker}
-                alt="sticker"
-                className="absolute pointer-events-none opacity-70"
-                style={{
-                  width: "64px",
-                  height: "64px",
-                  top: offsetY,
-                  left: offsetX,
-                  transform: `rotate(${rotate}deg)`,
-                  animation: "float 3s ease-in-out infinite alternate",
-                  zIndex: 1,
-                }}
-              />
-              <div className="bg-[#FFEF89] p-6 rounded-[20px] border border-[#FAC4D2] shadow-sm relative z-10">
+            return (
+              <div
+                key={msg.id}
+                className="relative bg-[#FFEF89] p-4 rounded-[20px] border border-[#FAC4D2] shadow-sm"
+              >
+                {/* STICKER */}
+                <img
+                  src={sticker}
+                  alt="sticker"
+                  className={`absolute ${stickerPosition} w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 animate-float`}
+                />
                 <p className="font-semibold text-gray-700">
                   Dari: <span className="text-[#FF89C8]">{msg.name}</span>
                 </p>
                 <p className="text-gray-800 italic break-words">{msg.message}</p>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
