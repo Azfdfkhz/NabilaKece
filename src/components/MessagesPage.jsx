@@ -6,7 +6,7 @@ export default function MessagesPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
 
-  const correctPassword = "nblakeren090127"; 
+  const correctPassword = "nblakeren090127";
 
   const handleAuth = (e) => {
     e.preventDefault();
@@ -73,41 +73,44 @@ export default function MessagesPage() {
         <h2 className="text-2xl sm:text-3xl font-semibold">To Nabilah</h2>
       </div>
 
-<div className="flex flex-col gap-6 mt-5 relative w-full">
-  {messages.map((msg, index) => {
-    const sticker = getRandomSticker();
-    const stickerOffsetX = index % 2 === 0 ? -20 : 20;
-    const stickerOffsetY = index % 2 === 0 ? -20 : 20;
+      {/* LIST PESAN */}
+      <div className="w-full max-w-md flex flex-col gap-6 mt-5 relative">
+        {messages.map((msg, index) => {
+          const sticker = getRandomSticker();
+          // Posisi stiker acak tapi aman tidak menutupi teks
+          const offsetX = Math.floor(Math.random() * 40) - 20; // -20px sampai +20px
+          const offsetY = Math.floor(Math.random() * 40) - 20; // -20px sampai +20px
+          const rotate = Math.random() * 20 - 10; // -10deg sampai +10deg
 
-    return (
-      <div key={msg.id} className="relative">
-        {/* STICKER DI LUAR KOTAK PESAN */}
-        <img
-          src={sticker}
-          alt="sticker"
-          className={`absolute`}
-          style={{
-            width: "64px",
-            height: "64px",
-            top: stickerOffsetY,
-            left: stickerOffsetX,
-            opacity: 0.7,
-            pointerEvents: "none",
-            transform: `rotate(${index % 2 === 0 ? -10 : 10}deg)`,
-            animation: "float 3s ease-in-out infinite alternate",
-            zIndex: 1,
-          }}
-        />
+          return (
+            <div key={msg.id} className="relative overflow-visible">
+              {/* STICKER DI LUAR PESAN */}
+              <img
+                src={sticker}
+                alt="sticker"
+                className="absolute pointer-events-none opacity-70"
+                style={{
+                  width: "64px",
+                  height: "64px",
+                  top: offsetY,
+                  left: offsetX,
+                  transform: `rotate(${rotate}deg)`,
+                  animation: "float 3s ease-in-out infinite alternate",
+                  zIndex: 1,
+                }}
+              />
 
-        {/* KOTAK PESAN */}
-        <div className="bg-[#FFEF89] p-6 rounded-[20px] border border-[#FAC4D2] shadow-sm relative z-10">
-          <p className="font-semibold text-gray-700">
-            Dari: <span className="text-[#FF89C8]">{msg.name}</span>
-          </p>
-          <p className="text-gray-800 italic break-words">{msg.message}</p>
-        </div>
+              {/* KOTAK PESAN */}
+              <div className="bg-[#FFEF89] p-6 rounded-[20px] border border-[#FAC4D2] shadow-sm relative z-10">
+                <p className="font-semibold text-gray-700">
+                  Dari: <span className="text-[#FF89C8]">{msg.name}</span>
+                </p>
+                <p className="text-gray-800 italic break-words">{msg.message}</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
-    );
-  })}
-</div>
-
+    </div>
+  );
+}
