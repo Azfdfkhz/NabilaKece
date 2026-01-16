@@ -89,11 +89,11 @@ export default function MessagesPage() {
                 className="relative bg-[#FFEF89] p-4 rounded-[20px] border border-[#FAC4D2] shadow-sm"
               >
                 {/* STICKER */}
-                <img src={sticker} alt="sticker" className={absolute w-10 h-10 ${stickerPosition} animate-float} />
                 <p className="font-semibold text-gray-700">
                   Dari: <span className="text-[#FF89C8]">{msg.name}</span>
                 </p>
                 <p className="text-gray-800 italic break-words">{msg.message}</p>
+               <img src={sticker} alt="sticker" className={absolute w-10 h-10 ${stickerPosition} animate-float} />
               </div>
             );
           })}
