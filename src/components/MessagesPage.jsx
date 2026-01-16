@@ -5,8 +5,25 @@ export default function MessagesPage() {
   const [messages, setMessages] = useState([]);
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
+  const [messageStickers, setMessageStickers] = useState({}); // stiker per pesan
 
   const correctPassword = "nblakeren090127";
+
+  const stickers = [
+    "/stickers/Cat.png",
+    "/stickers/Cute.png",
+    "/stickers/Flower.png",
+    "/stickers/Hbd.png",
+    "/stickers/Tulip.png",
+    "/stickers/Stroberi.png",
+  ];
+
+  const getRandomSticker = (usedStickers) => {
+    // ambil stiker yang belum dipakai dulu
+    const unused = stickers.filter((s) => !usedStickers.includes(s));
+    if (unused.length === 0) return stickers[Math.floor(Math.random() * stickers.length)];
+    return unused[Math.floor(Math.random() * unused.length)];
+  };
 
   const handleAuth = (e) => {
     e.preventDefault();
@@ -23,20 +40,20 @@ export default function MessagesPage() {
       .from("messages")
       .select("*")
       .order("created_at", { ascending: false });
-    if (!error) setMessages(data);
+    if (!error) {
+      setMessages(data);
+
+      // assign stiker untuk setiap pesan agar tidak ngulang
+      const stickersMap = {};
+      const usedStickers = [];
+      data.forEach((msg) => {
+        const sticker = getRandomSticker(usedStickers);
+        stickersMap[msg.id] = sticker;
+        usedStickers.push(sticker);
+      });
+      setMessageStickers(stickersMap);
+    }
   };
-
-  const stickers = [
-    "/stickers/Cat.png",
-    "/stickers/Cute.png",
-    "/stickers/Flower.png",
-    "/stickers/Hbd.png",
-    "/stickers/Tulip.png",
-    "/stickers/Stroberi.png",
-  ];
-
-  const getRandomSticker = () =>
-    stickers[Math.floor(Math.random() * stickers.length)];
 
   if (!authenticated) {
     return (
@@ -76,15 +93,13 @@ export default function MessagesPage() {
       {/* LIST PESAN */}
       <div className="w-full max-w-md flex flex-col gap-6 mt-5 relative">
         {messages.map((msg, index) => {
-          const sticker = getRandomSticker();
-          // Posisi stiker acak tapi aman tidak menutupi teks
-          const offsetX = Math.floor(Math.random() * 40) - 20; // -20px sampai +20px
-          const offsetY = Math.floor(Math.random() * 40) - 20; // -20px sampai +20px
-          const rotate = Math.random() * 20 - 10; // -10deg sampai +10deg
+          const sticker = messageStickers[msg.id]; // ambil stiker yang sudah ditentukan
+          const offsetX = Math.floor(Math.random() * 40) - 20;
+          const offsetY = Math.floor(Math.random() * 40) - 20;
+          const rotate = Math.random() * 20 - 10;
 
           return (
             <div key={msg.id} className="relative overflow-visible">
-              {/* STICKER DI LUAR PESAN */}
               <img
                 src={sticker}
                 alt="sticker"
@@ -99,8 +114,6 @@ export default function MessagesPage() {
                   zIndex: 1,
                 }}
               />
-
-              {/* KOTAK PESAN */}
               <div className="bg-[#FFEF89] p-6 rounded-[20px] border border-[#FAC4D2] shadow-sm relative z-10">
                 <p className="font-semibold text-gray-700">
                   Dari: <span className="text-[#FF89C8]">{msg.name}</span>
