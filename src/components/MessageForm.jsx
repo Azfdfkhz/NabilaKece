@@ -35,12 +35,12 @@ export default function MessageForm() {
       {/* HEADER */}
       <div className="bg-[#FAC4D2] w-full rounded-t-[40px] text-white px-5 py-8 flex items-center justify-between">
         <div className="flex flex-col text-left">
-          <p className="text-sm opacity-80 leading-tight">Say something</p>
+          <p className="text-xl opacity-80 leading-tight">Say something</p>
 
           {/* TEKS “TO NABILAH” YANG BISA DIKLIK */}
           <h2
             onClick={() => navigate("/view")}
-            className="font-semibold text-lg leading-tight cursor-pointer hover:opacity-90 transition"
+            className="font-semibold text-2xl leading-tight cursor-pointer hover:opacity-90 transition"
             title="Lihat pesan"
           >
             To Nabilah
@@ -81,6 +81,7 @@ export default function MessageForm() {
 
       {/* POPUP TERIMA KASIH */}
       {showPopup && <PopupThanks />}
+      <p className="text-gray-400 text-xs mb-3">Pesan terjaga dengan aman</p>
     </div>
   );
 }
