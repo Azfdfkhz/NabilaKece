@@ -6,7 +6,7 @@ export default function MessagesPage() {
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
 
-  const correctPassword = "bilanih"; // ubah sesuai keinginan kamu
+  const correctPassword = "nabilahcantik27"; 
 
   const handleAuth = (e) => {
     e.preventDefault();
