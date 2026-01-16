@@ -73,38 +73,44 @@ export default function MessagesPage() {
         <h2 className="text-2xl sm:text-3xl font-semibold">To Nabilah</h2>
       </div>
 
-      {/* LIST PESAN */}
-      <div className="bg-white w-full max-w-md rounded-b-[40px] px-5 pb-8 shadow-md">
-        <div className="flex flex-col gap-6 mt-5">
-          {messages.map((msg, index) => {
-            const sticker = getRandomSticker();
-            const stickerPosition =
-              index % 2 === 0
-                ? "-top-6 -left-6"
-                : "-bottom-6 -right-6";
+<div className="flex flex-col gap-6 mt-5 relative w-full">
+  {messages.map((msg, index) => {
+    const sticker = getRandomSticker();
+    const stickerOffsetX = index % 2 === 0 ? -20 : 20;
+    const stickerOffsetY = index % 2 === 0 ? -20 : 20;
 
-            return (
-              <div
-                key={msg.id}
-                className="relative bg-[#FFEF89] p-6 rounded-[20px] border border-[#FAC4D2] shadow-sm overflow-hidden"
-              >
-                {/* STICKER SEBAGAI DEKORASI */}
-                <img
-                  src={sticker}
-                  alt="sticker"
-                  className={`absolute ${stickerPosition} w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 opacity-70 animate-float pointer-events-none`}
-                />
+    return (
+      <div key={msg.id} className="relative">
+        {/* STICKER DI LUAR KOTAK PESAN */}
+        <img
+          src={sticker}
+          alt="sticker"
+          className={`absolute`}
+          style={{
+            width: "64px",
+            height: "64px",
+            top: stickerOffsetY,
+            left: stickerOffsetX,
+            opacity: 0.7,
+            pointerEvents: "none",
+            transform: `rotate(${index % 2 === 0 ? -10 : 10}deg)`,
+            animation: "float 3s ease-in-out infinite alternate",
+            zIndex: 1,
+          }}
+        />
 
-                {/* TEKS PESAN DI ATAS STICKER */}
-                <p className="font-semibold text-gray-700 relative z-10">
-                  Dari: <span className="text-[#FF89C8]">{msg.name}</span>
-                </p>
-                <p className="text-gray-800 italic break-words relative z-10">
-                  {msg.message}
-                </p>
-              </div>
-            );
-          })}
+        {/* KOTAK PESAN */}
+        <div className="bg-[#FFEF89] p-6 rounded-[20px] border border-[#FAC4D2] shadow-sm relative z-10">
+          <p className="font-semibold text-gray-700">
+            Dari: <span className="text-[#FF89C8]">{msg.name}</span>
+          </p>
+          <p className="text-gray-800 italic break-words">{msg.message}</p>
+        </div>
+      </div>
+    );
+  })}
+</div>
+
         </div>
       </div>
     </div>
