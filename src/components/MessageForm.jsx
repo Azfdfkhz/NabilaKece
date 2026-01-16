@@ -36,14 +36,14 @@ export default function MessageForm() {
       <div className="bg-[#FAC4D2] w-full rounded-t-[40px] text-white px-5 py-8 flex items-center justify-between">
         <div className="flex flex-col text-left">
           <p className="text-sm opacity-80 leading-tight">Say something</p>
-          <h2 className="font-semibold text-lg leading-tight">
-            To Nabilah{" "}
-            <button
-              onClick={() => navigate("/view")}
-              className="underline text-white/80 hover:text-white font-normal"
-            >
-              (lihat pesan)
-            </button>
+
+          {/* TEKS “TO NABILAH” YANG BISA DIKLIK */}
+          <h2
+            onClick={() => navigate("/view")}
+            className="font-semibold text-lg leading-tight cursor-pointer hover:opacity-90 transition"
+            title="Lihat pesan"
+          >
+            To Nabilah
           </h2>
         </div>
 
