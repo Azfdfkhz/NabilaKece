@@ -8,6 +8,15 @@ export default function MessagesPage() {
 
   const correctPassword = "nblakeren090127"; 
 
+  const stickers = [
+    "/stickers/Cat.png",
+    "/stickers/Cute.png",
+    "/stickers/Flower.png",
+    "/stickers/Hbd.png",
+    "/stickers/Tulip.png",
+    "/stickers/Stroberi.png",
+  ];
+
   const handleAuth = (e) => {
     e.preventDefault();
     if (password === correctPassword) {
@@ -23,20 +32,25 @@ export default function MessagesPage() {
       .from("messages")
       .select("*")
       .order("created_at", { ascending: false });
-    if (!error) setMessages(data);
+
+    if (!error && data) {
+      // Tambahkan sticker unik untuk setiap message
+      const usedStickers = [];
+      const dataWithSticker = data.map((msg) => {
+        // ambil sticker random yang belum dipakai
+        const availableStickers = stickers.filter(
+          (s) => !usedStickers.includes(s)
+        );
+        const sticker =
+          availableStickers[
+            Math.floor(Math.random() * availableStickers.length)
+          ] || stickers[0]; // fallback kalau semua habis
+        usedStickers.push(sticker);
+        return { ...msg, sticker };
+      });
+      setMessages(dataWithSticker);
+    }
   };
-
-  const stickers = [
-    "/stickers/Cat.png",
-    "/stickers/Cute.png",
-    "/stickers/Flower.png",
-    "/stickers/Hbd.png",
-    "/stickers/Tulip.png",
-    "/stickers/Stroberi.png",
-  ];
-
-  const getRandomSticker = () =>
-    stickers[Math.floor(Math.random() * stickers.length)];
 
   if (!authenticated) {
     return (
@@ -77,7 +91,6 @@ export default function MessagesPage() {
       <div className="bg-white w-full max-w-md rounded-b-[40px] px-5 pb-8 shadow-md">
         <div className="flex flex-col gap-6 mt-5">
           {messages.map((msg, index) => {
-            const sticker = getRandomSticker();
             const stickerPosition =
               index % 2 === 0
                 ? "top-[-14px] left-[-14px] rotate-[-10deg]"
@@ -93,7 +106,11 @@ export default function MessagesPage() {
                   Dari: <span className="text-[#FF89C8]">{msg.name}</span>
                 </p>
                 <p className="text-gray-800 italic break-words">{msg.message}</p>
-               <img src={sticker} alt="sticker" className={absolute w-10 h-10 ${stickerPosition} animate-float} />
+                <img
+                  src={msg.sticker}
+                  alt="sticker"
+                  className={`absolute w-10 h-10 ${stickerPosition} animate-float`}
+                />
               </div>
             );
           })}
