@@ -53,12 +53,18 @@ export default function MessagesPage() {
                 key={msg.id}
                 className="relative bg-[#FFEF89] p-4 rounded-[20px] border border-[#FAC4D2] shadow-sm"
               >
-                {/* STIKER DENGAN ANIMASI BOUNCE */}
                 <img
-                  src={sticker}
-                  alt="sticker"
-                  className={`absolute w-9 h-9 ${stickerPosition} animate-float`}
+                src={sticker}
+                alt="sticker"
+                className={`
+                    absolute 
+                    ${stickerPosition} 
+                    w-12 h-12 sm:w-16 sm:h-16 
+                    md:w-20 md:h-20 
+                    animate-float
+                `}
                 />
+
 
                 <p className="font-semibold text-gray-700">
                   Dari: <span className="text-[#FF89C8]">{msg.name}</span>
