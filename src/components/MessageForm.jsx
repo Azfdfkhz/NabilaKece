@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { supabase } from "../supabaseClient";
 import PopupThanks from "./PopupThanks";
-import LegoSlider from "./LegoSlider";
 import { useNavigate } from "react-router-dom";
+import LegoSlider from "./LegoSlider";
 
 export default function MessageForm() {
   const [name, setName] = useState("");
@@ -14,40 +14,30 @@ export default function MessageForm() {
     e.preventDefault();
     if (!name.trim() || !message.trim()) return alert("Isi semua kolom!");
 
-    const { error } = await supabase.from("messages").insert([
-      { name, message, created_at: new Date() },
-    ]);
+    // Insert data langsung ke Supabase
+    const { data, error } = await supabase
+      .from("messages")
+      .insert([{ name, message }]);
 
     if (error) {
-      console.error(error);
-      alert("Gagal mengirim pesan");
-      return;
+      alert("Gagal mengirim pesan: " + error.message);
+    } else {
+      setShowPopup(true);
+      setName("");
+      setMessage("");
+      setTimeout(() => setShowPopup(false), 3000);
     }
-
-    setShowPopup(true);
-    setName("");
-    setMessage("");
-    setTimeout(() => setShowPopup(false), 3000);
   };
 
   return (
     <div className="flex flex-col items-center bg-white rounded-[40px] w-full max-w-sm mx-auto shadow-md overflow-hidden animate-fadeIn">
-      {/* HEADER */}
+      {/* HEADER PINK */}
       <div className="bg-[#FAC4D2] w-full rounded-t-[40px] text-white px-5 py-8 flex items-center justify-between">
         <div className="flex flex-col text-left">
-          <p className="text-sm opacity-80 leading-tight">Say something</p>
-
-          {/* TEKS “TO NABILAH” YANG BISA DIKLIK */}
-          <h2
-            onClick={() => navigate("/view")}
-            className="font-semibold text-lg leading-tight cursor-pointer hover:opacity-90 transition"
-            title="Lihat pesan"
-          >
-            To Nabilah
-          </h2>
+            <p className="text-lg sm:text-xl opacity-80 leading-relaxed">Say something</p>
+            <h2 className="font-semibold text-2xl sm:text-3xl leading-snug">To Nabilah</h2>
         </div>
 
-        {/* LEGO SLIDER */}
         <div className="flex-shrink-0 w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] md:w-[160px] md:h-[160px]">
           <LegoSlider />
         </div>
@@ -79,8 +69,9 @@ export default function MessageForm() {
         </button>
       </form>
 
-      {/* POPUP TERIMA KASIH */}
       {showPopup && <PopupThanks />}
+
+      <p className="text-gray-400 text-xs mb-3">Pesan terjaga dengan aman</p>
     </div>
   );
 }
