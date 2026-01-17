@@ -3,7 +3,7 @@ export default function PopupThanks() {
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 animate-fadeIn">
       <div className="bg-transparent flex flex-col items-center justify-center animate-scaleUp">
         <iframe
-          src="https://tenor.com/view/인사하는-고양이-인사-고양이-thank-you-gif-342906123308285810"
+          src="https://tenor.com/embed/342906123308285810"
           width="230"
           height="230"
           allowFullScreen
