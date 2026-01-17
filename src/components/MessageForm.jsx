@@ -27,11 +27,13 @@ export default function MessageForm() {
     setShowPopup(true);
     setName("");
     setMessage("");
-    setTimeout(() => setShowPopup(false), 3000);
+
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    setShowPopup(false);
   };
 
   return (
-    <div className="flex flex-col items-center bg-white rounded-[40px] w-full max-w-sm mx-auto shadow-md overflow-hidden animate-fadeIn">
+    <div className="flex flex-col items-center bg-white rounded-[40px] w-full max-w-sm mx-auto shadow-md overflow-hidden animate-fadeIn relative">
       {/* HEADER */}
       <div className="bg-[#FAC4D2] w-full rounded-t-[40px] text-white px-5 py-8 flex items-center justify-between">
         <div className="flex flex-col text-left">
@@ -81,6 +83,7 @@ export default function MessageForm() {
 
       {/* POPUP TERIMA KASIH */}
       {showPopup && <PopupThanks />}
+
       <p className="text-gray-400 text-xs mb-3">Pesan terjaga dengan aman</p>
     </div>
   );
